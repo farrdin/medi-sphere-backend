@@ -8,8 +8,8 @@ const moduleRoutes = [
     route: medicineRoutes,
   },
   // {
-  //   path: '/shop',
-  //   route: medicineRoutes,
+  //   path: '/api/auth',
+  //   route: authRouter,
   // },
 ];
 
