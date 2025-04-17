@@ -1,13 +1,18 @@
-import { Router } from 'express'
-const router = Router()
+import { Router } from 'express';
+import { medicineRoutes } from '../modules/medicine/medicine.route';
+const router = Router();
 
 const moduleRoutes = [
   {
-    path: '/',
-    route: router,
+    path: '/medicines',
+    route: medicineRoutes,
   },
-]
+  // {
+  //   path: '/shop',
+  //   route: medicineRoutes,
+  // },
+];
 
-moduleRoutes.forEach((route) => router.use(route.path, route.route))
+moduleRoutes.forEach((route) => router.use(route.path, route.route));
 
-export default router
+export default router;

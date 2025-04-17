@@ -1,0 +1,63 @@
+import { z } from 'zod';
+
+const MedicineTypeEnum = z.enum([
+  'Tablet',
+  'Syrup',
+  'Injection',
+  'Capsule',
+  'Ointment',
+  'Drops',
+]);
+
+const MedicineCategoryEnum = z.enum([
+  'Pain Relief',
+  'Antibiotic',
+  'Antiviral',
+  'Antifungal',
+  'Allergy',
+  'Digestive',
+  'Supplement',
+  'Chronic Disease',
+  'Emergency',
+]);
+
+const createMedicineZodSchemaValidation = z.object({
+  name: z.string().min(1, 'Medicine name is required'),
+  description: z.string().optional(),
+  price: z.number().nonnegative('Price cannot be negative'),
+  quantity: z.number().nonnegative('Quantity cannot be negative'),
+  requiredPrescription: z.boolean(),
+  manufacturer: z.string().min(1, 'Manufacturer is required'),
+  expiryDate: z.coerce.date(),
+  type: MedicineTypeEnum,
+  category: MedicineCategoryEnum,
+  symptoms: z.array(z.string()).optional(),
+  discount: z.number().nonnegative().optional().default(0),
+  imageUrl: z.string().url('Must be a valid image URL').optional(),
+  supplier: z.string().optional(),
+  inStock: z.boolean(),
+  isDeleted: z.boolean().optional(),
+});
+
+const updateMedicineZodSchemaValidation = z.object({
+  name: z.string().min(1).optional(),
+  description: z.string().optional(),
+  price: z.number().nonnegative().optional(),
+  quantity: z.number().nonnegative().optional(),
+  requiredPrescription: z.boolean().optional(),
+  manufacturer: z.string().min(1).optional(),
+  expiryDate: z.coerce.date().optional(),
+  type: MedicineTypeEnum.optional(),
+  category: MedicineCategoryEnum.optional(),
+  symptoms: z.array(z.string()).optional(),
+  discount: z.number().nonnegative().optional(),
+  imageUrl: z.string().url().optional(),
+  supplier: z.string().optional(),
+  inStock: z.boolean().optional(),
+  isDeleted: z.boolean().optional(),
+});
+
+export const medicineValidation = {
+  createMedicineZodSchemaValidation,
+  updateMedicineZodSchemaValidation,
+};
