@@ -1,19 +1,20 @@
-import express, { Application, Request, Response } from 'express';
+import Express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import authRouter from './app/modules/auth/auth.routes';
+import router from './app/routes';
+import globalErrorHandler from './app/middlewares/globalErrorhandler';
 
-const app: Application = express();
+const app: Application = Express();
 
-// Middleware
-app.use(express.json());
+//parser
+app.use(Express.json());
 app.use(cors());
 
-// All API routes go here
-app.use('/api/auth', authRouter); // Only one router for now
-
-// Health check route
+// App Api Routes
+app.use('/api', router);
 app.get('/', (req: Request, res: Response) => {
   res.send('Medi-Sphere App Is Running');
 });
+
+app.use(globalErrorHandler);
 
 export default app;
