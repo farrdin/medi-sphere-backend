@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { medicineRoutes } from '../modules/medicine/medicine.route';
 import authRouter from '../modules/auth/auth.routes';
+import orderRouter from '../modules/order/order.router';
 const router = Router();
 
 const moduleRoutes = [
@@ -9,8 +10,12 @@ const moduleRoutes = [
     route: medicineRoutes,
   },
   {
-    path: '/api/auth',
+    path: '/auth',
     route: authRouter,
+  },
+  {
+    path: '/orders',
+    route: orderRouter,
   },
 ];
 

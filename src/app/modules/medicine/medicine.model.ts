@@ -38,9 +38,9 @@ const medicineSchema: Schema = new Schema<IMedicine>(
       required: [true, 'Medicine type is required'],
       enum: ['Tablet', 'Syrup', 'Injection', 'Capsule', 'Ointment', 'Drops'],
     },
-    category: {
-      type: String,
-      required: [true, 'Medicine category is required'],
+    categories: {
+      type: [String],
+      required: [true, 'At least one category is required'],
       enum: [
         'Pain Relief',
         'Antibiotic',
@@ -73,6 +73,12 @@ const medicineSchema: Schema = new Schema<IMedicine>(
     isDeleted: {
       type: Boolean,
       default: false,
+    },
+    sku: {
+      type: String,
+    },
+    tags: {
+      type: [String],
     },
   },
   { timestamps: true },
