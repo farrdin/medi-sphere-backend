@@ -11,7 +11,7 @@ const orderSchema = new Schema<TOrder>(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
 const Order = model<TOrder>('Order', orderSchema);

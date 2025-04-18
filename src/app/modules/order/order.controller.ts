@@ -9,6 +9,7 @@ const createOrder = async (req: Request, res: Response) => {
 
     const response = {
       _id: result._id,
+      medicineName: result.name,
       email: result.email,
       product: result.product,
       quantity: result.quantity,

@@ -6,7 +6,7 @@ import globalErrorHandler from './app/middlewares/globalErrorhandler';
 const app: Application = Express();
 
 //parser
-app.use(Express.json())
+app.use(Express.json());
 app.use(
   cors({
     origin: [
@@ -16,7 +16,7 @@ app.use(
     ],
     credentials: true,
   }),
-)
+);
 
 // App Api Routes
 app.use('/api', router);
