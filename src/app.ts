@@ -10,9 +10,9 @@ app.use(Express.json());
 app.use(
   cors({
     origin: [
-      'http://localhost:5173',
+      'http://localhost:3000',
       'https://medi-sphere-five.vercel.app',
-      'http://localhost:5174',
+      'http://localhost:3001',
     ],
     credentials: true,
   }),
