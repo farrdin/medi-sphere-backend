@@ -7,7 +7,16 @@ const app: Application = Express();
 
 //parser
 app.use(Express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      'http://localhost:3000',
+      'https://medi-sphere-five.vercel.app',
+      'http://localhost:3001',
+    ],
+    credentials: true,
+  }),
+);
 
 // App Api Routes
 app.use('/api', router);

@@ -6,7 +6,6 @@ import { Medicine } from './medicine.model';
 // create a medicine into db
 const createMedicineIntoDB = async (payload: IMedicine) => {
   const result = await Medicine.create(payload);
-
   return result;
 };
 
