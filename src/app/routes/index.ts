@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { medicineRoutes } from '../modules/medicine/medicine.route';
 import authRouter from '../modules/auth/auth.routes';
 import orderRouter from '../modules/order/order.router';
+import stockRouter from '../modules/stocks/stock.route'; // Import the stockRouter
 const router = Router();
 
 const moduleRoutes = [
@@ -16,6 +17,11 @@ const moduleRoutes = [
   {
     path: '/orders',
     route: orderRouter,
+  },
+
+  {
+    path: '/stocks',  
+    route: stockRouter,  
   },
 ];
 
