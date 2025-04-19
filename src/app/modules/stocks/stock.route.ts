@@ -14,13 +14,15 @@ router.get('/', async (req, res) => {
       {
         $group: {
           _id: null,
-          total: { $sum: '$quantity' },  // Sum all the 'quantity' values
+          total: { $sum: '$quantity' }, // Sum all the 'quantity' values
         },
       },
     ]);
 
     // Count how many low-stock items are there (quantity < 10)
-    const lowStockItems = await Medicine.countDocuments({ quantity: { $lt: 10 } });
+    const lowStockItems = await Medicine.countDocuments({
+      quantity: { $lt: 10 },
+    });
 
     // Extract total stock from the aggregation result
     const totalStock = totalStockAggregation[0]?.total || 0;

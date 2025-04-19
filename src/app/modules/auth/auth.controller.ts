@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { User } from './auth.model';
 import bcrypt from 'bcryptjs';
+// import jwt from 'jsonwebtoken';
+// import config from '../../config';
 
 const randomPass = Math.ceil(Math.random() * 1000000);
 
@@ -51,6 +53,18 @@ export const loginUser = async (req: Request, res: Response) => {
       res.status(400).json({ message: 'Invalid email or password' });
       return;
     }
+    // ! for postman Testing get token in result
+    // const token = jwt.sign(
+    //   {
+    //     _id: user._id,
+    //     email: user.email,
+    //     role: user.role,
+    //   },
+    //   config.jwt_secret as string,
+    //   {
+    //     expiresIn: '1d',
+    //   },
+    // );
 
     res.status(200).json({ message: 'Login successful', user });
   } catch (error) {

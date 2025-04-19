@@ -20,8 +20,8 @@ const moduleRoutes = [
   },
 
   {
-    path: '/stocks',  
-    route: stockRouter,  
+    path: '/stocks',
+    route: stockRouter,
   },
 ];
 
