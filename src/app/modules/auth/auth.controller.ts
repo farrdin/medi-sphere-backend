@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response } from 'express';
 import { User } from './auth.model';
 import bcrypt from 'bcryptjs';
@@ -67,7 +66,7 @@ export const loginUser = async (req: Request, res: Response) => {
       },
     );
 
-    res.status(200).json({ message: 'Login successful', user });
+    res.status(200).json({ message: 'Login successful', user, token });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }
