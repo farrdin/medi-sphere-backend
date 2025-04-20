@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import User from './User'; // Adjust path if needed
 
-export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const users = await User.find(); // This fetches all users from MongoDB
     res.status(200).json(users);
@@ -13,7 +17,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
 export const getSingleUser = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const user = await User.findById(req.params.id);
@@ -30,7 +34,7 @@ export const getSingleUser = async (
 export const updateUser = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
@@ -49,8 +53,11 @@ export const updateUser = async (
   }
 };
 
-
-export const getCurrentUser = async (req: Request, res: Response, next: NextFunction) => {
+export const getCurrentUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const userId = req.user?._id; // assuming `req.user` is populated by auth middleware
 
@@ -74,7 +81,11 @@ export const getCurrentUser = async (req: Request, res: Response, next: NextFunc
 import jwt from 'jsonwebtoken'; // If using JWT for authentication
 
 // Authentication middleware to populate `req.user`
-export const authenticate = (req: Request, res: Response, next: NextFunction) => {
+export const authenticate = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const token = req.headers.authorization?.split(' ')[1]; // Get token from Authorization header
 
   if (!token) {

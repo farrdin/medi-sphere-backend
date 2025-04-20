@@ -21,15 +21,13 @@ const moduleRoutes = [
   },
 
   {
-    path: '/stocks',  
-    route: stockRouter,  
+    path: '/stocks',
+    route: stockRouter,
   },
   {
-    path: '/users', // 
+    path: '/users', //
     route: userRoutes,
   },
-
-
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

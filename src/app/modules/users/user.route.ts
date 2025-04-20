@@ -1,8 +1,41 @@
 // ✅ BACKEND - user.route.ts
 import express, { Request, Response, NextFunction } from 'express';
-import { getSingleUser, getAllUsers, getCurrentUser, updateUser } from './user.controller'; // Ensure getCurrentUser is added to the controller
+import {
+  getSingleUser,
+  getAllUsers,
+  getCurrentUser,
+  updateUser,
+} from './user.controller'; // Ensure getCurrentUser is added to the controller
+import User from './User';
 
 const router = express.Router();
+
+router.get('/email/:email', async (req: Request, res: Response) => {
+  try {
+    const user = await User.findOne({ email: req.params.email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json(user);
+  } catch (err: any) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.put('/:id', async (req: Request, res: Response) => {
+  try {
+    const { name, email } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { name, email },
+      { new: true },
+    );
+
+    if (!updatedUser)
+      return res.status(404).json({ message: 'User not found' });
+    res.json(updatedUser);
+  } catch (err: any) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // 🔹 GET /users/me (To fetch current user data)
 router.get('/me', async (req: Request, res: Response, next: NextFunction) => {
@@ -32,13 +65,16 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 });
 
 // 🔹 PATCH /users/:id (Update user data)
-router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await updateUser(req, res, next);
-  } catch (error) {
-    next(error);
-  }
-});
+router.patch(
+  '/:id',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await updateUser(req, res, next);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 export const userRoutes = router;
 export default router;
