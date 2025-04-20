@@ -9,7 +9,7 @@ const moduleRoutes = [
     route: medicineRoutes,
   },
   {
-    path: '/api/auth',
+    path: '/auth',
     route: authRouter,
   },
 ];

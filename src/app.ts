@@ -7,7 +7,12 @@ const app: Application = Express();
 
 //parser
 app.use(Express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+  }),
+);
 
 // App Api Routes
 app.use('/api', router);
