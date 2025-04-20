@@ -3,6 +3,7 @@ import { medicineServices } from './medicine.service';
 import sendResponse from '../../utils/sendResponse';
 import catchAsync from '../../utils/catchAsync';
 import httpStatus from 'http-status';
+import { MedicineCategory, MedicineType } from './medicine.interface';
 
 const createMedicine = catchAsync(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -19,7 +20,45 @@ const createMedicine = catchAsync(
 
 // get all medicines | search and filter medicine
 const getAllMedicines = catchAsync(async (req: Request, res: Response) => {
-  const result = await medicineServices.getAllMedicinesFromDB();
+  const {
+    searchTerm,
+    tags,
+    symptoms,
+    inStock,
+    requiredPrescription,
+    minPrice,
+    maxPrice,
+    type,
+    categories,
+    page,
+    limit,
+    sortBy,
+    sortOrder,
+  } = req.query;
+
+  const result = await medicineServices.getAllMedicinesFromDB(
+    searchTerm as string,
+    tags ? ((Array.isArray(tags) ? tags : [tags]) as string[]) : undefined,
+    symptoms
+      ? ((Array.isArray(symptoms) ? symptoms : [symptoms]) as string[])
+      : undefined,
+    inStock !== undefined ? inStock === 'true' : undefined,
+    requiredPrescription !== undefined
+      ? requiredPrescription === 'true'
+      : undefined,
+    minPrice ? parseFloat(minPrice as string) : undefined,
+    maxPrice ? parseFloat(maxPrice as string) : undefined,
+    type as MedicineType,
+    categories
+      ? ((Array.isArray(categories)
+          ? categories
+          : [categories]) as MedicineCategory[])
+      : undefined,
+    page ? parseInt(page as string) : undefined,
+    limit ? parseInt(limit as string) : undefined,
+    sortBy as string,
+    sortOrder as 'asc' | 'desc' | undefined,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
