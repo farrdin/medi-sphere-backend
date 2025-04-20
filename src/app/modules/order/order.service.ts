@@ -39,6 +39,10 @@ const createOrder = async (
     currency: 'BDT',
     customer_name: user?.name,
     customer_email: user?.email,
+    customer_address: 'Dhaka',
+    customer_city: 'Dhaka',
+    customer_phone: '01700000000',
+    customer_post_code: '1212',
     client_ip,
   };
 
