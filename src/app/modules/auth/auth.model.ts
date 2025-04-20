@@ -21,11 +21,17 @@ const UserSchema = new Schema(
   { timestamps: true },
 );
 
-UserSchema.pre('save', async function () {
-  this.password = await bcrypt.hash(
-    this.password,
-    Number(config.bcrypt_salt_rounds),
-  );
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next(); // only hash if password is new or changed
+
+  try {
+    const saltRounds = Number(config.bcrypt_salt_rounds) || 10;
+    const hashedPassword = await bcrypt.hash(this.password, saltRounds);
+    this.password = hashedPassword;
+    next();
+  } catch (err) {
+    next(err as Error);
+  }
 });
 
 export const User = mongoose.model('User', UserSchema);
