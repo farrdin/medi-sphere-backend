@@ -1,8 +1,8 @@
 import { Document, Types } from 'mongoose';
 
 export interface TOrder extends Document {
-  user: Types.ObjectId;
-  products: { product: Types.ObjectId; quantity: number }[];
+  user: { _id: Types.ObjectId; name: string; email: string };
+  products: { product: Types.ObjectId; name: string; quantity: number }[];
   totalPrice: number;
   status: 'Pending' | 'Paid' | 'Shipped' | 'Completed' | 'Cancelled';
   transaction: {
