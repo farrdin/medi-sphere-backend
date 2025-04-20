@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // ✅ BACKEND - user.controller.ts
 import { Request, Response } from 'express';
 import User from '../users/User'; // your mongoose user model
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const updateUser = async (
   req: Request,
   res: Response,
