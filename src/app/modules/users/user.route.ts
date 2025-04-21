@@ -32,6 +32,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     if (!updatedUser)
       return res.status(404).json({ message: 'User not found' });
     res.json(updatedUser);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     res.status(500).json({ message: err.message });
   }
