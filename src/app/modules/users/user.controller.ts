@@ -58,7 +58,7 @@ export const getCurrentUser = async (
   next: NextFunction,
 ) => {
   try {
-    const userId = req.user?._id; // assuming `req.user` is populated by auth middleware
+    const userId = req.user?.id;
 
     if (!userId) {
       return res.status(401).json({ message: 'User not authenticated' });
@@ -75,16 +75,10 @@ export const getCurrentUser = async (
   }
 };
 
-// ✅ Add the authenticate middleware in case you don't have it in another file
-
 import jwt from 'jsonwebtoken'; // If using JWT for authentication
 
 // Authentication middleware to populate `req.user`
-export const authenticate = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const auth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(' ')[1]; // Get token from Authorization header
 
   if (!token) {
@@ -92,10 +86,28 @@ export const authenticate = (
   }
 
   try {
-    const decoded = jwt.verify(token, 'your_secret_key'); // Verify the token using your secret key
-    req.user = decoded; // Attach user data (decoded) to the request object
-    next(); // Continue to the next middleware/route handler
+    const decoded = jwt.verify(token, 'your_secret_key');
+    if (
+      typeof decoded === 'object' &&
+      decoded !== null &&
+      'id' in decoded &&
+      'name' in decoded &&
+      'email' in decoded &&
+      'role' in decoded
+    ) {
+      req.user = decoded as {
+        id: string;
+        name: string;
+        email: string;
+        role: 'user' | 'admin';
+      };
+    } else {
+      return res.status(401).json({ message: 'Invalid token payload' });
+    }
+    next();
   } catch (error) {
-    return res.status(401).json({ message: 'Invalid or expired token' });
+    const errorMessage =
+      error instanceof Error ? error.message : 'An unknown error occurred';
+    return res.status(401).json({ message: errorMessage });
   }
 };
