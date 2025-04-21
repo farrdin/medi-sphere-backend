@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // ✅ BACKEND - user.route.ts
 import express from 'express';
 import { updateUser as updateUserController } from './user.controller'; // Adjust the import path as necessary
@@ -18,7 +19,6 @@ export const updateUser = async (
     next(error);
   }
 };
-
 router.patch(
   '/:id',
   async (req: Request, res: Response, next: NextFunction) => {

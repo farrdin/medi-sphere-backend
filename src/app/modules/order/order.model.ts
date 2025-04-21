@@ -4,9 +4,19 @@ import { TOrder } from './order.interface';
 const orderSchema = new Schema<TOrder>(
   {
     user: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
+      _id: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
     },
     products: [
       {
@@ -15,12 +25,21 @@ const orderSchema = new Schema<TOrder>(
           ref: 'Product',
           required: true,
         },
+        name: {
+          type: String,
+          required: true,
+        },
         quantity: {
           type: Number,
           required: true,
         },
       },
     ],
+    deliveryType: {
+      type: String,
+      enum: ['standard', 'express'],
+      required: true,
+    },
     totalPrice: {
       type: Number,
       required: true,
