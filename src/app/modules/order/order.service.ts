@@ -73,8 +73,18 @@ const orderRevenue = async () => {
   return result[0]?.totalRevenue || 0;
 };
 
-const getOrders = async () => {
-  const data = await Order.find();
+// const getOrders = async () => {
+//   const data = await Order.find();
+//   return data;
+// };
+
+const getOrders = async (email?: string) => {
+  let data = await Order.find().populate('user', 'email name').exec();
+
+  if (email) {
+    data = data.filter((order) => order.user?.email === email);
+  }
+
   return data;
 };
 

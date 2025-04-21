@@ -1,7 +1,13 @@
 import { Document, Types } from 'mongoose';
 
+export interface TUser {
+  _id: Types.ObjectId;
+  email: string;
+  name?: string;
+}
+
 export interface TOrder extends Document {
-  user: Types.ObjectId;
+  user:  TUser;
   products: { product: Types.ObjectId; quantity: number }[];
   totalPrice: number;
   status: 'Pending' | 'Paid' | 'Shipped' | 'Completed' | 'Cancelled';

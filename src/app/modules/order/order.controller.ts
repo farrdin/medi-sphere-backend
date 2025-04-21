@@ -37,7 +37,8 @@ const orderRevenue = async (req: Request, res: Response) => {
 };
 
 const getOrders = catchAsync(async (req, res) => {
-  const order = await orderService.getOrders();
+  const email = req.query.email as string | undefined;
+  const order = await orderService.getOrders(email);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
