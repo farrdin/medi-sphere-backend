@@ -7,8 +7,8 @@ export interface TUser {
 }
 
 export interface TOrder extends Document {
-  user:  TUser;
-  products: { product: Types.ObjectId; quantity: number }[];
+  user: { _id: Types.ObjectId; name: string; email: string };
+  products: { product: Types.ObjectId; name: string; quantity: number }[];
   totalPrice: number;
   status: 'Pending' | 'Paid' | 'Shipped' | 'Completed' | 'Cancelled';
   transaction: {
