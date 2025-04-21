@@ -41,7 +41,6 @@ export const updateUser = async (
       new: true, // returns the updated user instead of the original one
       runValidators: true, // ensures that validators are run during the update
     });
-
     if (!updatedUser) {
       res.status(404).json({ message: 'User not found' });
       return;

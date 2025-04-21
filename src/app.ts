@@ -11,6 +11,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
+      'https://medi-sphere-client.vercel.app',
       'https://medi-sphere-five.vercel.app',
       'http://localhost:3001',
     ],
