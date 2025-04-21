@@ -88,6 +88,23 @@ const getOrders = async (email?: string) => {
   return data;
 };
 
+//upd
+const updateOrderStatus = async (
+  id: string,
+  payload: { status: string },
+) => {
+  const result = await Order.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Order not found!');
+  }
+
+  return result;
+};
+
 const verifyPayment = async (order_id: string) => {
   const verifiedPayment = await orderUtils.verifyPaymentAsync(order_id);
 
@@ -123,4 +140,5 @@ export const orderService = {
   orderRevenue,
   verifyPayment,
   getOrders,
+  updateOrderStatus,
 };
