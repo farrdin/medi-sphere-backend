@@ -46,7 +46,14 @@ const orderSchema = new Schema<TOrder>(
     },
     status: {
       type: String,
-      enum: ['Pending', 'Paid', 'Shipped', 'Completed', 'Cancelled'],
+      enum: [
+        'Pending',
+        'Paid',
+        'Processing',
+        'Shipped',
+        'Completed',
+        'Cancelled',
+      ],
       default: 'Pending',
     },
     transaction: {

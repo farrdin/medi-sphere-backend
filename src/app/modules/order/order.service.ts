@@ -81,9 +81,36 @@ const orderRevenue = async () => {
   return result[0]?.totalRevenue || 0;
 };
 
-const getOrders = async () => {
-  const data = await Order.find();
+// const getOrders = async () => {
+//   const data = await Order.find();
+//   return data;
+// };
+
+const getOrders = async (email?: string) => {
+  let data = await Order.find().populate('user', 'email name').exec();
+
+  if (email) {
+    data = data.filter((order) => order.user?.email === email);
+  }
+
   return data;
+};
+
+//upd
+const updateOrderStatus = async (
+  id: string,
+  payload: { status: string },
+) => {
+  const result = await Order.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Order not found!');
+  }
+
+  return result;
 };
 
 const verifyPayment = async (order_id: string) => {
@@ -121,4 +148,5 @@ export const orderService = {
   orderRevenue,
   verifyPayment,
   getOrders,
+  updateOrderStatus,
 };
