@@ -97,10 +97,7 @@ const getOrders = async (email?: string) => {
 };
 
 //upd
-const updateOrderStatus = async (
-  id: string,
-  payload: { status: string },
-) => {
+const updateOrderStatus = async (id: string, payload: { status: string }) => {
   const result = await Order.findByIdAndUpdate(id, payload, {
     new: true,
     runValidators: true,
