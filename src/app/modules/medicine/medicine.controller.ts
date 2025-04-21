@@ -8,6 +8,11 @@ import { MedicineCategory, MedicineType } from './medicine.interface';
 const createMedicine = catchAsync(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async (req: Request, res: Response, next: NextFunction) => {
+    // add cloudinary url to body if file exists
+    if (req.file) {
+      req.body.imageUrl = req.file.path;
+    }
+
     const result = await medicineServices.createMedicineIntoDB(req.body);
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -81,11 +86,28 @@ const getSingleMedicine = catchAsync(async (req: Request, res: Response) => {
 });
 
 // update a single medicine
+// const updateMedicine = catchAsync(async (req: Request, res: Response) => {
+//   const id = req.params.id;
+//   const body = req.body;
+//   const result = await medicineServices.updateMedicineIntoDB(id, body);
+
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: 'Medicine updated successfully!',
+//     data: result,
+//   });
+// });
 const updateMedicine = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const body = req.body;
-  const result = await medicineServices.updateMedicineIntoDB(id, body);
 
+  // update imageUrl if new file is uploaded
+  if (req.file) {
+    body.imageUrl = req.file.path;
+  }
+
+  const result = await medicineServices.updateMedicineIntoDB(id, body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

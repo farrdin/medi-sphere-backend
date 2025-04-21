@@ -13,6 +13,13 @@ orderRouter.get('/verify', auth(UserRole.user), orderController.verifyPayment);
 orderRouter
   .route('/')
   .post(auth(UserRole.user), orderController.createOrder)
-  .get(auth(UserRole.user), orderController.getOrders);
+  .get(auth(UserRole.admin), orderController.getOrders);
+
+orderRouter
+  .route('/:id')
+  .put(auth(UserRole.admin), orderController.updateOrderStatus);
+
+// orderRouter.get('/', orderController.getOrders);
+// orderRouter.put('/:id', orderController.updateOrderStatus);
 
 export default orderRouter;
