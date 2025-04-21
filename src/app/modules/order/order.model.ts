@@ -35,6 +35,11 @@ const orderSchema = new Schema<TOrder>(
         },
       },
     ],
+    deliveryType: {
+      type: String,
+      enum: ['standard', 'express'],
+      required: true,
+    },
     totalPrice: {
       type: Number,
       required: true,

@@ -8,6 +8,7 @@ const createOrder = async (
   user: { _id: string; name: string; email: string },
   payload: {
     products: { product: string; quantity: number }[];
+    deliveryType: 'standard' | 'express';
   },
   client_ip: string,
 ) => {
@@ -20,17 +21,24 @@ const createOrder = async (
     products.map(async (item) => {
       const product = await Medicine.findById(item.product);
       if (product) {
-        const subtotal = product ? (product.price || 0) * item.quantity : 0;
-        totalPrice += subtotal;
+        const price =
+          product.discount && product.discount > 0
+            ? product.price - product.discount
+            : product.price;
+        const subtotal = (price || 0) * item.quantity;
+        totalPrice += parseFloat(subtotal.toFixed(2));
         return item;
       }
     }),
   );
-
+  const deliveryCharge = payload.deliveryType === 'express' ? 6 : 3;
+  totalPrice += deliveryCharge;
+  totalPrice = parseFloat(totalPrice.toFixed(2));
   let order = await Order.create({
     user,
     products: productDetails,
     totalPrice,
+    deliveryType: payload.deliveryType,
   });
   // payment integration
   const shurjopayPayload = {
