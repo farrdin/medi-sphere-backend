@@ -1,18 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import User from './User'; // Adjust path if needed
 
-export const getAllUsers = async (
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const updateUser = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: unknown,
 ) => {
-  try {
-    const users = await User.find(); // This fetches all users from MongoDB
-    res.status(200).json(users);
-  } catch (error) {
-    next(error);
-  }
-};
+  const { id } = req.params;
+  const { name, email, phone } = req.body;
 
 export const getSingleUser = async (
   req: Request,
@@ -20,27 +16,11 @@ export const getSingleUser = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
-    }
-    res.status(200).json(user);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const updateUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true, // returns the updated user instead of the original one
-      runValidators: true, // ensures that validators are run during the update
-    });
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { name, email, phone },
+      { new: true },
+    );
     if (!updatedUser) {
       res.status(404).json({ message: 'User not found' });
       return;
@@ -106,8 +86,6 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
     }
     next();
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : 'An unknown error occurred';
-    return res.status(401).json({ message: errorMessage });
+    res.status(500).json({ message: 'Failed to update user', error });
   }
 };
