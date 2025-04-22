@@ -3,7 +3,7 @@
 import { Router } from 'express';
 const router = Router();
 import { Request, Response } from 'express';
-import User from './User';
+import { User } from '../auth/auth.model';
 
 // Adjust path if needed
 router.get(
