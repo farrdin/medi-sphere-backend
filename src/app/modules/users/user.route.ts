@@ -1,33 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// ✅ BACKEND - user.route.ts
 import express from 'express';
-import { updateUser as updateUserController } from './user.controller'; // Adjust the import path as necessary
-import { Request, Response } from 'express';
-import { NextFunction } from 'express';
+import {
+  getUserByEmail,
+  updateUser,
+  getSingleUser,
+  getCurrentUser,
+  getAllUsers,
+} from './user.controller';
+import auth from '../../middlewares/auth';
 
-const router = express.Router();
+const userRouter = express.Router();
 
-export const updateUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
-  try {
-    // Your update logic here
-    res.status(200).json({ message: 'User updated successfully' });
-  } catch (error) {
-    next(error);
-  }
-};
-router.patch(
-  '/:id',
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await updateUserController(req, res, next);
-    } catch (error) {
-      next(error);
-    }
-  },
-); // PATCH /users/:id
+userRouter.get('/', auth('admin'), getAllUsers);
+userRouter.get('/email/:email', getUserByEmail);
+userRouter.patch('/:id', updateUser);
+userRouter.get('/:id', getSingleUser);
+userRouter.get('/me', auth('user', 'admin'), getCurrentUser);
 
-export const userRoutes = router;
+export default userRouter;
