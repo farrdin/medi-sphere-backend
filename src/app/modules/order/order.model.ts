@@ -33,6 +33,9 @@ const orderSchema = new Schema<TOrder>(
           type: Number,
           required: true,
         },
+        prescriptionFile: {
+          type: String,
+        },
       },
     ],
     deliveryType: {
