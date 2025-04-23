@@ -2,8 +2,8 @@ import { Router } from 'express';
 import { medicineRoutes } from '../modules/medicine/medicine.route';
 import authRouter from '../modules/auth/auth.routes';
 import orderRouter from '../modules/order/order.router';
-import stockRouter from '../modules/stocks/stock.route'; // Import the stockRouter
-import { userRoutes } from '../modules/users/user.route';
+import stockRouter from '../modules/stocks/stock.route';
+import userRouter from '../modules/users/user.route';
 const router = Router();
 
 const moduleRoutes = [
@@ -25,8 +25,8 @@ const moduleRoutes = [
     route: stockRouter,
   },
   {
-    path: '/users', //
-    route: userRoutes,
+    path: '/users',
+    route: userRouter,
   },
 ];
 

@@ -1,101 +1,98 @@
 import { Request, Response, NextFunction } from 'express';
-import User from './User'; // Adjust path if needed
+import httpStatus from 'http-status';
+import AppError from '../../errors/AppError';
+import { User } from '../auth/auth.model';
 
+// Get all users
 export const getAllUsers = async (
   req: Request,
   res: Response,
   next: NextFunction,
-) => {
+): Promise<void> => {
   try {
-    const users = await User.find(); // This fetches all users from MongoDB
-    res.status(200).json(users);
+    const users = await User.find(); // You can add filtering/pagination here later
+    res.status(httpStatus.OK).json(users);
   } catch (error) {
     next(error);
   }
 };
+// Get user by email
+export const getUserByEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    const user = await User.findOne({ email: req.params.email });
+    if (!user) {
+      throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+    }
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+// Update user details
+export const updateUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const { id } = req.params;
+  const { name, email, phone } = req.body;
 
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      { name, email, phone },
+      { new: true },
+    );
+
+    if (!updatedUser) {
+      throw new AppError(httpStatus.NOT_FOUND, 'User not found');
+    }
+
+    res.status(httpStatus.OK).json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+};
+// Get a user by ID
 export const getSingleUser = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const user = await User.findById(req.params.id);
+    const { id } = req.params;
+    const user = await User.findById(id);
     if (!user) {
-      res.status(404).json({ message: 'User not found' });
-      return;
+      throw new AppError(httpStatus.NOT_FOUND, 'User not found');
     }
-    res.status(200).json(user);
+    res.status(httpStatus.OK).json(user);
   } catch (error) {
     next(error);
   }
 };
-
-export const updateUser = async (
+// Get current authenticated user
+export const getCurrentUser = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true, // returns the updated user instead of the original one
-      runValidators: true, // ensures that validators are run during the update
-    });
-    if (!updatedUser) {
-      res.status(404).json({ message: 'User not found' });
-      return;
-    }
-
-    res.status(200).json(updatedUser); // Send the updated user object back
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getCurrentUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const userId = req.user?._id; // assuming `req.user` is populated by auth middleware
-
+    const userId = req.user?.id;
     if (!userId) {
-      return res.status(401).json({ message: 'User not authenticated' });
+      throw new AppError(httpStatus.UNAUTHORIZED, 'User not authenticated');
     }
 
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      throw new AppError(httpStatus.NOT_FOUND, 'User not found');
     }
 
-    res.status(200).json(user); // Send the current user data back
+    res.status(httpStatus.OK).json(user);
   } catch (error) {
     next(error);
-  }
-};
-
-// ✅ Add the authenticate middleware in case you don't have it in another file
-
-import jwt from 'jsonwebtoken'; // If using JWT for authentication
-
-// Authentication middleware to populate `req.user`
-export const authenticate = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const token = req.headers.authorization?.split(' ')[1]; // Get token from Authorization header
-
-  if (!token) {
-    return res.status(401).json({ message: 'Authorization token is required' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, 'your_secret_key'); // Verify the token using your secret key
-    req.user = decoded; // Attach user data (decoded) to the request object
-    next(); // Continue to the next middleware/route handler
-  } catch (error) {
-    return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };

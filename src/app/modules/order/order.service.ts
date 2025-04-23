@@ -8,6 +8,7 @@ const createOrder = async (
   user: { _id: string; name: string; email: string },
   payload: {
     products: { product: string; quantity: number }[];
+    deliveryType: 'standard' | 'express';
   },
   client_ip: string,
 ) => {
@@ -20,17 +21,24 @@ const createOrder = async (
     products.map(async (item) => {
       const product = await Medicine.findById(item.product);
       if (product) {
-        const subtotal = product ? (product.price || 0) * item.quantity : 0;
-        totalPrice += subtotal;
+        const price =
+          product.discount && product.discount > 0
+            ? product.price - product.discount
+            : product.price;
+        const subtotal = (price || 0) * item.quantity;
+        totalPrice += parseFloat(subtotal.toFixed(2));
         return item;
       }
     }),
   );
-
+  const deliveryCharge = payload.deliveryType === 'express' ? 6 : 3;
+  totalPrice += deliveryCharge;
+  totalPrice = parseFloat(totalPrice.toFixed(2));
   let order = await Order.create({
     user,
     products: productDetails,
     totalPrice,
+    deliveryType: payload.deliveryType,
   });
   // payment integration
   const shurjopayPayload = {
@@ -73,9 +81,33 @@ const orderRevenue = async () => {
   return result[0]?.totalRevenue || 0;
 };
 
-const getOrders = async () => {
-  const data = await Order.find();
+// const getOrders = async () => {
+//   const data = await Order.find();
+//   return data;
+// };
+
+const getOrders = async (email?: string) => {
+  let data = await Order.find().populate('user', 'email name').exec();
+
+  if (email) {
+    data = data.filter((order) => order.user?.email === email);
+  }
+
   return data;
+};
+
+//upd
+const updateOrderStatus = async (id: string, payload: { status: string }) => {
+  const result = await Order.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!result) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Order not found!');
+  }
+
+  return result;
 };
 
 const verifyPayment = async (order_id: string) => {
@@ -113,4 +145,5 @@ export const orderService = {
   orderRevenue,
   verifyPayment,
   getOrders,
+  updateOrderStatus,
 };

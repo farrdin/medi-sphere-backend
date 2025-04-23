@@ -35,13 +35,25 @@ const orderSchema = new Schema<TOrder>(
         },
       },
     ],
+    deliveryType: {
+      type: String,
+      enum: ['standard', 'express'],
+      required: true,
+    },
     totalPrice: {
       type: Number,
       required: true,
     },
     status: {
       type: String,
-      enum: ['Pending', 'Paid', 'Shipped', 'Completed', 'Cancelled'],
+      enum: [
+        'Pending',
+        'Paid',
+        'Processing',
+        'Shipped',
+        'Completed',
+        'Cancelled',
+      ],
       default: 'Pending',
     },
     transaction: {
