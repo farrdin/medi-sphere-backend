@@ -8,10 +8,21 @@ export interface TUser {
 
 export interface TOrder extends Document {
   user: { _id: Types.ObjectId; name: string; email: string };
-  products: { product: Types.ObjectId; name: string; quantity: number }[];
+  products: {
+    product: Types.ObjectId;
+    name: string;
+    quantity: number;
+    prescriptionFile?: string;
+  }[];
   deliveryType: 'standard' | 'express';
   totalPrice: number;
-  status: 'Pending' | 'Paid' | 'Shipped' | 'Completed' | 'Cancelled';
+  status:
+    | 'Pending'
+    | 'Paid'
+    | 'Processing'
+    | 'Shipped'
+    | 'Completed'
+    | 'Cancelled';
   transaction: {
     id: string;
     transactionStatus: string;
