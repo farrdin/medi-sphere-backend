@@ -36,7 +36,15 @@ const medicineSchema: Schema = new Schema<IMedicine>(
     type: {
       type: String,
       required: [true, 'Medicine type is required'],
-      enum: ['Tablet', 'Syrup', 'Injection', 'Capsule', 'Ointment', 'Drops'],
+      enum: [
+        'Tablet',
+        'Syrup',
+        'Injection',
+        'Capsule',
+        'Ointment',
+        'Moisturizer',
+        'Drops',
+      ],
     },
     categories: {
       type: [String],

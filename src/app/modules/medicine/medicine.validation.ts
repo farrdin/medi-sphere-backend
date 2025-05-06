@@ -6,6 +6,7 @@ const MedicineTypeEnum = z.enum([
   'Injection',
   'Capsule',
   'Ointment',
+  'Moisturizer',
   'Drops',
 ]);
 

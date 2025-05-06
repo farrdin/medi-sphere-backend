@@ -1,0 +1,53 @@
+import { model, Schema } from 'mongoose';
+import { TReview } from './review.interface';
+
+const reviewSchema = new Schema<TReview>(
+  {
+    user: {
+      _id: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
+    },
+    products: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: 'Product',
+          required: true,
+        },
+        name: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    rating: {
+      type: Number,
+      min: 1,
+      max: 5,
+      default: 5,
+      required: true,
+    },
+    comment: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  },
+);
+
+const Review = model<TReview>('Review', reviewSchema);
+export default Review;
